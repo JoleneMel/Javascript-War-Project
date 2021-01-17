@@ -2,64 +2,65 @@
 const SUITS = ["club", "clover", "heart", "spade"]
 const VALUES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 const cardValueMap = {
-    '2' : 2,
-    '3' : 3,
-    '4' : 4,
-    '5' : 5,
-    '6' : 6,
-    '7' : 7,
-    '8' : 8,
-    '9' : 9,
-    '10': 10,
-    'J' : 11,
-    'Q' : 12,
-    'K' : 13,
-    'A' : 14
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  '6': 6,
+  '7': 7,
+  '8': 8,
+  '9': 9,
+  '10': 10,
+  'J': 11,
+  'Q': 12,
+  'K': 13,
+  'A': 14
 }
 
 class Deck {
-    constructor(cards = freshDeck()) {
-        this.cards = cards
+  constructor(cards = freshDeck()) {
+    this.cards = cards
+  }
+
+  //get allows us to assign numberofcards = this.cards.length so it doesnt have to be repeated as often
+  get numberOfCards() {
+    return this.cards.length
+  }
+  //method shuffle to shuffle cards up in a random order basically looping and swapping thru the cards 
+  shuffle() {
+    //To achieve the better sorting/ shuffling results we will create a for loop 
+    //using this.numberOfCards will be a better way to see it in plain english 
+    //i > 0; because we do not need to flip the final card.
+    //in plain terms we are going from the back of the cards to the front of the cards i-- for removing cards till the game ends 
+    for (let i = this.numberOfCards - 1; i > 0; i--) {
+      //in order to get a random card we will random index that is eariler in the deck of cards aka math.random, then we want to multiply it by 
+      //i which is the current index + 1. This will give us a placement inside of our deck that is somewhere else 
+      //to ensure it is an interger we will use math.floor 
+      //changed to this.numberOfCards to go thru every card better 
+      const newIndex = Math.floor(Math.random() * (this.numberOfCards))
+      //now we want to flip the values at the new index with the current index,so we need the oldValue = basically the value currently at our newindex
+      const oldValue = this.cards[newIndex]
+      //now we need to take the card that is at our i index and put it where our new index is. 
+      this.cards[newIndex] = this.cards[i]
+      this.cards[i] = oldValue
     }
-    
-//get allows us to assign numberofcards = this.cards.length so it doesnt have to be repeated as often
-    get numberOfCards() {
-        return this.cards.length 
-    }
-//method shuffle to shuffle cards up in a random order basically looping and swapping thru the cards 
-    shuffle() {
-        //To achieve the better sorting/ shuffling results we will create a for loop 
-        //using this.numberOfCards will be a better way to see it in plain english 
-        //i > 0; because we do not need to flip the final card.
-        //in plain terms we are going from the back of the cards to the front of the cards i-- for removing cards till the game ends 
-        for (let i = this.numberOfCards - 1; i > 0; i--) {
-            //in order to get a random card we will random index that is eariler in the deck of cards aka math.random, then we want to multiply it by 
-            //i which is the current index + 1. This will give us a placement inside of our deck that is somewhere else 
-            //to ensure it is an interger we will use math.floor 
-            const newIndex = Math.floor(Math.random() * (i + 1))
-            //now we want to flip the values at the new index with the current index,so we need the oldValue = basically the value currently at our newindex
-            const oldValue = this.cards[newIndex]
-            //now we need to take the card that is at our i index and put it where our new index is. 
-            this.cards[newIndex] = this.cards[i]
-            this.cards[i] = oldValue
-        }
-    }
+  }
 }
 
 class Card {
-    constructor(suit, value) {
-        this.suit = suit
-        this.value = value 
-    }
+  constructor(suit, value) {
+    this.suit = suit
+    this.value = value
+  }
 }
 
 function freshDeck() {
-    //using a flat map makes a nice and neat array rather than just map that will give you 4 seperate arrays 
-    return SUITS.flatMap(suit => {
-        return VALUES.map(value => {
-            return new Card(suit, value)
-        })
+  //using a flat map makes a nice and neat array rather than just map that will give you 4 seperate arrays 
+  return SUITS.flatMap(suit => {
+    return VALUES.map(value => {
+      return new Card(suit, value)
     })
+  })
 }
 
 
@@ -76,80 +77,78 @@ console.log(deck2.cards);
 
 
 class Player {
-    constructor(name) {
-        this.name = name
-        this.playerDeck = []
-        this.playerScore = 0 
+  constructor(name) {
+    this.name = name
+    this.playerDeck = []
+    this.playerScore = 0
 
+  }
+  addNewDeck(deck) {
+      this.playerDeck = deck
     }
 
 }
 
-//global variables 
-let player1Deck
-let player2Deck
-
-let player1 =  new Player();
-let player2 =  new Player();
+let Molly = new Player("Molly");
+let Kelly = new Player("Kelly");
 
 
 
-startGame();
-class startGame {
-    constructor() {
-    //create a deck 
-    const deck = new Deck();
-    //shuffles cards
-    deck.shuffle();
-    
-    //splits deck of cards and gives a variable to use for splitting the deck
-    const middleOfDeck = (deck.numberOfCards / 2)
-    //this creates a deck thats already preshuffled (more information on the array slice method)
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice 
-    player1Deck = new Deck(deck.cards.slice(0, middleOfDeck))
-    //since we only have the last 26 cards left we have to start from middleOfDeck-end aka deck.numberOfCards
-    player2Deck = new Deck(deck.cards.slice(middleOfDeck, deck.numberOfCards))
-    //checking the shuffled decks of the players 
 
-    console.log(player1Deck);
-    console.log(player2Deck); 
-    
-    playRound(); {
-        for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
-        console.log(player1.player1Deck.cards[i]);
-        console.log(player2.player2Deck.cards[i]); 
-                
-            }
+function startGame(player1, player2) {
+  //create a deck 
+  const deck = new Deck();
+  //shuffles cards
+  deck.shuffle();
+
+  //splits deck of cards and gives a variable to use for splitting the deck
+  const middleOfDeck = (deck.numberOfCards / 2);
+  //this creates a deck thats already preshuffled (more information on the array slice method)
+  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice 
+  player1.addNewDeck(deck.cards.slice(0, middleOfDeck));
+  //since we only have the last 26 cards left we have to start from middleOfDeck-end aka deck.numberOfCards
+  player2.addNewDeck(deck.cards.slice(middleOfDeck, deck.numberOfCards));
+  //checking the shuffled decks of the players 
+
+  console.log(player1.playerDeck);
+
+  function playRound(roundNum) {
+      console.log(`${player1.name} plays: ${player1.playerDeck[roundNum].value} of ${player1.playerDeck[roundNum].suit}
+      `);
+      console.log(`${player2.name} plays: ${player2.playerDeck[roundNum].value} of ${player2.playerDeck[roundNum].suit}
+      `);
+  }
+  function playRoundResults() {
+    for (let i = 0; i < 26; i++) {
+        playRound(i);
+      if (cardValueMap[player1.playerDeck[i].value] > cardValueMap[player2.playerDeck[i].value]) {
+        player1.playerScore += 1;
+        console.log(`${player1.name} has won this round`);
+      } else if (cardValueMap[player1.playerDeck[i].value] < cardValueMap[player2.playerDeck[i].value]) {
+        player2.playerScore += 1;
+        console.log(`${player2.name} has won this round`);
+      } else {
+        console.log("This is a tie, no points rewarded")
+      }
+
     }
-playRoundResults(); {
-    for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
-        if(player1.cards.value > player2.cards.value) {
-            player1.playerScore + 1; 
-            console.log("Player1 has won this round");
-        }else if(player1.cards.value < player2.cards.value) {
-            player2.playerScore + 1; 
-            console.log("Player2 has won this round");
-        }else{
-            console.log("This is a tie, no points rewarded")
-        }
-    
-        finalTally();{
-            if(player1.playerScore > player2.playerScore) {
-                console.log(`Player1 has won this round with a final score of: ${player1.playerScore}`);
-            }else if(player1.playerScore < player2.playerScore) {
-                console.log(`Player2 has won this round with a final score of: ${player2.playerScore}`);
-            }else{
-                console.log('Player1 and Player2 have tied!')
-            }
-            }
-
-        }
+    finalTally();
+  }
+  function finalTally() {
+    if (player1.playerScore > player2.playerScore) {
+      console.log(`${player1.name} has won this round with a final score of: ${player1.playerScore}`);
+    } else if (player1.playerScore < player2.playerScore) {
+      console.log(`${player2.name} has won this round with a final score of: ${player2.playerScore}`);
+    } else {
+      console.log(`${player1.name} and ${player2.name} have tied!`)
+    }
 }
-//need a method for rounds where player 1 and player 2 play cards 
+   
+playRoundResults();
 
+ 
+ 
+}
+startGame(Molly, Kelly);
 
-//if statement about cards and their values where a result would end in a point given to either player one or two or result in a tie. 
-
-
-//Another method that displays final scores also stops when all cards have been// played
 
