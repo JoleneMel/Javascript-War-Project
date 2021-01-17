@@ -111,7 +111,11 @@ function startGame() {
     //checking the shuffled decks of the players 
 
     console.log(player1Deck);
-    console.log(player2Deck); 
+    console.log(player2Deck);
+    playRound(); {
+            for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
+                console.log(player1.playerDeck.cards[i]);
+                console.log(player2.playerDeck.cards[i]);
 
     if (roundWinner(player1Card, player2Card)) {
         console.log(results)
