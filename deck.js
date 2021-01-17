@@ -89,13 +89,14 @@ class Player {
 let player1Deck
 let player2Deck
 
-let player1 = Player();
-let player2 = Player();
+let player1 =  new Player();
+let player2 =  new Player();
 
 
 
 startGame();
-function startGame() {
+class startGame {
+    constructor() {
     //create a deck 
     const deck = new Deck();
     //shuffles cards
@@ -111,37 +112,44 @@ function startGame() {
     //checking the shuffled decks of the players 
 
     console.log(player1Deck);
-    console.log(player2Deck);
-    playRound(); {
-            for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
-                console.log(player1.playerDeck.cards[i]);
-                console.log(player2.playerDeck.cards[i]);
-
-    if (roundWinner(player1Card, player2Card)) {
-        console.log(results)
-    }
-
+    console.log(player2Deck); 
     
+    playRound(); {
+        for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
+        console.log(player1.player1Deck.cards[i]);
+        console.log(player2.player2Deck.cards[i]); 
+                
+            }
+    }
+playRoundResults(); {
+    for(let i = 0; i < player1.playerDeck.numberOfCards(); i++) {
+        if(player1.cards.value > player2.cards.value) {
+            player1.playerScore + 1; 
+            console.log("Player1 has won this round");
+        }else if(player1.cards.value < player2.cards.value) {
+            player2.playerScore + 1; 
+            console.log("Player2 has won this round");
+        }else{
+            console.log("This is a tie, no points rewarded")
+        }
+    
+        finalTally();{
+            if(player1.playerScore > player2.playerScore) {
+                console.log(`Player1 has won this round with a final score of: ${player1.playerScore}`);
+            }else if(player1.playerScore < player2.playerScore) {
+                console.log(`Player2 has won this round with a final score of: ${player2.playerScore}`);
+            }else{
+                console.log('Player1 and Player2 have tied!')
+            }
+            }
 
+        }
 }
 //need a method for rounds where player 1 and player 2 play cards 
 
 
-    //if statement about cards and their values where a result would end in a point given to either player one or two or result in a tie. 
+//if statement about cards and their values where a result would end in a point given to either player one or two or result in a tie. 
 
 
-    //Another method that displays final scores also stops when all cards have been played 
+//Another method that displays final scores also stops when all cards have been// played
 
-
-
-
-function Rounds() {
-    const player1Hand = player1Deck.pop()
-    const player2Hand = player2Deck.pop()
-}
-
-function roundWinner(player1Card, player2Card) {
-    return cardValueMap[player1Card.value] > cardValueMap[player2Card.value]
-
-
-}
