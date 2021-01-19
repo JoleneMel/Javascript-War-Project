@@ -1,5 +1,4 @@
-//const SUITS = ["♠", "♣", "♥", "♦"] doesnt display on console
-const SUITS = ["club", "clover", "heart", "spade"]
+const SUITS = ["club", "diamond", "heart", "spade"]
 const VALUES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 const cardValueMap = {
   '2': 2,
@@ -17,14 +16,36 @@ const cardValueMap = {
   'A': 14
 }
 
+class Card {
+
+  constructor(suit, value) {
+    this.suit = suit;
+    this.value = value;
+  }
+}
+
+class Player {
+
+  constructor(name) {
+    this.name = name;
+    this.playerDeck = [];
+    this.playerScore = 0;
+  }
+
+  addNewDeck(deck) {
+    this.playerDeck = deck;
+  }
+}
+
 class Deck {
+
   constructor(cards = freshDeck()) {
-    this.cards = cards
+    this.cards = cards;
   }
 
   //get allows us to assign numberofcards = this.cards.length so it doesnt have to be repeated as often
   get numberOfCards() {
-    return this.cards.length
+    return this.cards.length;
   }
   //method shuffle to shuffle cards up in a random order basically looping and swapping thru the cards 
   shuffle() {
@@ -37,65 +58,28 @@ class Deck {
       //i which is the current index + 1. This will give us a placement inside of our deck that is somewhere else 
       //to ensure it is an interger we will use math.floor 
       //changed to this.numberOfCards to go thru every card better 
-      const newIndex = Math.floor(Math.random() * (this.numberOfCards))
+      const newIndex = Math.floor(Math.random() * (this.numberOfCards));
       //now we want to flip the values at the new index with the current index,so we need the oldValue = basically the value currently at our newindex
-      const oldValue = this.cards[newIndex]
+      const oldValue = this.cards[newIndex];
       //now we need to take the card that is at our i index and put it where our new index is. 
-      this.cards[newIndex] = this.cards[i]
-      this.cards[i] = oldValue
+      this.cards[newIndex] = this.cards[i];
+      this.cards[i] = oldValue;
     }
   }
 }
 
-class Card {
-  constructor(suit, value) {
-    this.suit = suit
-    this.value = value
-  }
-}
 
 function freshDeck() {
   //using a flat map makes a nice and neat array rather than just map that will give you 4 seperate arrays 
   return SUITS.flatMap(suit => {
     return VALUES.map(value => {
-      return new Card(suit, value)
-    })
-  })
+      return new Card(suit, value);
+    });
+  });
 }
 
 
-//test out deck array
-const deck = new Deck();
-//gives it back in one neat array
-console.log(deck.cards);
-
-//testing deck that is shuffled to know it randomizes them.
-const deck2 = new Deck();
-deck2.shuffle()
-console.log(deck2.cards);
-
-
-
-class Player {
-  constructor(name) {
-    this.name = name
-    this.playerDeck = []
-    this.playerScore = 0
-
-  }
-  addNewDeck(deck) {
-      this.playerDeck = deck
-    }
-
-}
-
-let Molly = new Player("Molly");
-let Kelly = new Player("Kelly");
-
-
-
-
-function startGame(player1, player2) {
+function setupGame(player1, player2) {
   //create a deck 
   const deck = new Deck();
   //shuffles cards
@@ -110,45 +94,50 @@ function startGame(player1, player2) {
   player2.addNewDeck(deck.cards.slice(middleOfDeck, deck.numberOfCards));
   //checking the shuffled decks of the players 
 
-  console.log(player1.playerDeck);
+} 
 
-  function playRound(roundNum) {
-      console.log(`${player1.name} plays: ${player1.playerDeck[roundNum].value} of ${player1.playerDeck[roundNum].suit}
-      `);
-      console.log(`${player2.name} plays: ${player2.playerDeck[roundNum].value} of ${player2.playerDeck[roundNum].suit}
-      `);
-  }
-  function playRoundResults() {
-    for (let i = 0; i < 26; i++) {
-        playRound(i);
-      if (cardValueMap[player1.playerDeck[i].value] > cardValueMap[player2.playerDeck[i].value]) {
-        player1.playerScore += 1;
-        console.log(`${player1.name} has won this round`);
-      } else if (cardValueMap[player1.playerDeck[i].value] < cardValueMap[player2.playerDeck[i].value]) {
-        player2.playerScore += 1;
-        console.log(`${player2.name} has won this round`);
-      } else {
-        console.log("This is a tie, no points rewarded")
-      }
 
-    }
-    finalTally();
-  }
-  function finalTally() {
-    if (player1.playerScore > player2.playerScore) {
-      console.log(`${player1.name} has won this round with a final score of: ${player1.playerScore}`);
-    } else if (player1.playerScore < player2.playerScore) {
-      console.log(`${player2.name} has won this round with a final score of: ${player2.playerScore}`);
+function roundOutput(player1, player2, roundNum) {
+  console.log(`${player1.name} plays: ${player1.playerDeck[roundNum].value} of ${player1.playerDeck[roundNum].suit}
+  `);
+  console.log(`${player2.name} plays: ${player2.playerDeck[roundNum].value} of ${player2.playerDeck[roundNum].suit}
+  `);
+}
+
+
+function playRoundResults(player1, player2) {
+  //changed to player1.playerDeck.length to create more tests
+  for (let i = 0; i < player1.playerDeck.length; i++) {
+      roundOutput(player1, player2, i);
+    if (cardValueMap[player1.playerDeck[i].value] > cardValueMap[player2.playerDeck[i].value]) {
+      player1.playerScore += 1;
+      console.log(`${player1.name} has won this round`);
+    } else if (cardValueMap[player1.playerDeck[i].value] < cardValueMap[player2.playerDeck[i].value]) {
+      player2.playerScore += 1;
+      console.log(`${player2.name} has won this round`);
     } else {
-      console.log(`${player1.name} and ${player2.name} have tied!`)
+      console.log("This is a tie, no points rewarded");
     }
+  }
 }
-   
-playRoundResults();
-
- 
- 
-}
-startGame(Molly, Kelly);
 
 
+function finalTally(player1, player2) {
+  if (player1.playerScore > player2.playerScore) {
+    console.log(`${player1.name} has won this round with a final score of: ${player1.playerScore}`);
+  } else if (player1.playerScore < player2.playerScore) {
+    console.log(`${player2.name} has won this round with a final score of: ${player2.playerScore}`);
+  } else {
+    console.log(`${player1.name} and ${player2.name} have tied!`);
+  }
+} 
+
+let Molly = new Player("Molly");
+let Kelly = new Player("Kelly");
+
+//Needed to pass in Molly and Kelly once they were called outside of setupGame function to properly run
+setupGame(Molly, Kelly);
+
+playRoundResults(Molly, Kelly);
+
+finalTally(Molly, Kelly);
