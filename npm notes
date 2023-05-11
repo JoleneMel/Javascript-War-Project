@@ -1,0 +1,13 @@
+After cding into correct directory 
+
+npm init 
+
+enter thru
+
+then 
+
+npm install mocha 
+
+npm install chai
+
+npm init is VERY IMPORTANT
